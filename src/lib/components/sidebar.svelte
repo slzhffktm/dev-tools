@@ -1,14 +1,22 @@
-<script lang="ts">
+<script>
 	import { cn } from '@/utils';
 	import { Button } from '$components/ui/button';
 
-	let className: string | null | undefined = undefined;
+	/**
+	 * @type string | null | undefined
+	 */
+	let className = undefined;
 	export { className as class };
 
 	/**
-	 * @type []{ section: string, items: []{ title: string, icon: string } }
+	 * @type { section: string, items: { title: string, icon: string, href: string, active?: boolean }[] }[]
 	 */
 	export let sidebarList;
+
+	/**
+	 * @type string
+	 */
+	export let selectedTitle;
 </script>
 
 <div class={cn('pb-12', className)}>
@@ -19,8 +27,15 @@
 					{section}
 				</h2>
 				<div class="space-y-1">
-					{#each items as { title, icon }}
-						<Button variant="secondary" class="w-full justify-start">
+					{#each items as { title, icon, href, active }}
+						<Button
+							variant={selectedTitle === title ? 'secondary' : 'ghost'}
+							class="w-full justify-start"
+							{href}
+							on:click={() => {
+								selectedTitle = title;
+							}}
+						>
 							<i class="{icon} mr-2" />
 							{title}
 						</Button>
